@@ -1,4 +1,4 @@
-# HealthConnect: End-to-End QA Automation Framework
+# HealthConnect: End-to-End Selenium Testing Automation Framework
 
 ## 📌 Project Overview
 A robust, scalable E2E test automation framework engineered to validate the core user journeys of **HealthConnect**—a cloud-native telehealth web application built with React, WebRTC, and Supabase. 
