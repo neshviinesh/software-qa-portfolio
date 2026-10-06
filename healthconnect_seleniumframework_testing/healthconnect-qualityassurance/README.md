@@ -3,7 +3,7 @@
 ## 📌 Project Overview
 A robust, scalable E2E test automation framework engineered to validate the core user journeys of **HealthConnect**—a cloud-native telehealth web application built with React, WebRTC, and Supabase. 
 
-This framework is designed for high reliability in modern, state-heavy dynamic web environments, specifically tackling complex automation challenges like native component bypassing and React DOM state injection.
+
 
 ## 🚀 Key Framework Features
 * **Page Object Model (POM) Architecture:** Strict separation of test logic from page-specific element locators and interaction methods, ensuring high maintainability and code reuse.
