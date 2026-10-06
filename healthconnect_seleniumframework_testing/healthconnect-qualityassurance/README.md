@@ -1,91 +1,58 @@
-# HealthConnect QA Automation Framework
+# 🏥 HealthConnect: End-to-End QA Automation Framework
 
-An end-to-end (E2E) automated testing framework for the HealthConnect telehealth platform. Built with Python, Selenium WebDriver, and Pytest, this framework is engineered to test complex multiplayer workflows, including live WebRTC video consultations and dynamic React rendering.
+![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)
+![Selenium](https://img.shields.io/badge/Selenium-43B02A?style=for-the-badge&logo=selenium&logoColor=white)
+![Pytest](https://img.shields.io/badge/pytest-0A9EDC?style=for-the-badge&logo=pytest&logoColor=white)
 
-## 🚀 Key Features
+## 📌 Project Overview
+A robust, scalable E2E test automation framework engineered to validate the core user journeys of **HealthConnect**—a cloud-native telehealth web application built with React, WebRTC, and Supabase. 
 
-* **Dual-Driver WebRTC Testing:** Simulates simultaneous real-time interactions between Doctor and Patient sessions using a custom `dual_driver` Pytest fixture.
-* **Media Stream Spoofing:** Bypasses hardware permissions to inject synthetic video/audio feeds using Chrome flags (`--use-fake-ui-for-media-stream`, `--use-fake-device-for-media-stream`).
-* **Page Object Model (POM):** Centralized UI locators and methods for high maintainability and reduced code duplication.
-* **Data-Driven Testing (DDT):** Leverages `@pytest.mark.parametrize` to execute exhaustive positive and negative validation matrices (e.g., login flows) within a single test block.
-* **Intelligent Synchronization:** Implements explicit `WebDriverWait` strategies to handle React race conditions and asynchronous DOM updates.
-* **Automated Visual Reporting:** Automatically generates self-contained HTML execution reports and embeds Base64 screenshots of the browser state upon test failure.
-* **Parallel Execution:** Configured for multi-core test execution via `pytest-xdist` to drastically reduce suite execution time.
+This framework is designed for high reliability in modern, state-heavy dynamic web environments, specifically tackling complex automation challenges like native component bypassing and React DOM state injection.
 
-## 📁 Project Structure
+## 🚀 Key Framework Features
+* **Page Object Model (POM) Architecture:** Strict separation of test logic from page-specific element locators and interaction methods, ensuring high maintainability and code reuse.
+* **React State Injection & DOM Manipulation:** Utilizes custom JavaScript execution within Selenium to forcefully trigger React `onChange` and `onInput` event listeners, bypassing restrictive native browser elements (e.g., Chrome date pickers) for deterministic test execution.
+* **Parallel Test Execution:** Configured with `pytest-xdist` to run test suites concurrently across multiple workers, drastically reducing CI/CD pipeline execution time.
+* **Dynamic Wait Strategies:** Implementation of explicit `WebDriverWait` conditions to handle dynamic React rendering and async API fetches without relying on fragile hard-coded sleep methods.
+* **Automated Evidence Generation:** Integrated with `pytest-html` to automatically generate rich HTML execution reports with embedded screenshots upon test failure.
 
+## 🛠️ Technology Stack
+* **Language:** Python 3.14
+* **Browser Automation:** Selenium WebDriver
+* **Test Runner:** Pytest
+* **Parallelization:** Pytest-Xdist
+* **Reporting:** Pytest-HTML
+
+## 📂 Framework Architecture
 ```text
-healthconnect-qualityassurance/
-├── pages/                      # Page Object Model classes
-│   ├── base_page.py            # Core Selenium wrapper methods
-│   ├── login_page.py           # Authentication UI locators
-│   └── doctor_dashboard_page.py# Dashboard locators
-├── tests/                      # Pytest test suites
-│   ├── test_webrtc_consultation.py # Multiplayer video E2E flow
-│   ├── test_login_scenarios.py     # Parameterized negative login tests
-│   └── test_doctor_schedule.py     # Profile & scheduling tests
-├── config.py                   # Centralized environment variables & credentials
-├── conftest.py                 # Pytest fixtures, browser setup, & reporting hooks
-├── .gitignore                  # Git exclusion rules
-└── README.md                   # Project documentation
-
-```
-## 🛠️ Installation & Setup
-
-1. **Clone the repository:**
-```bash
-git clone https://github.com/YOUR_USERNAME/healthconnect-qa.git
-cd healthconnect-qa
+01-HealthConnect-QA/
+│
+├── pages/                  # Page Object classes (UI locators & methods)
+│   ├── base_page.py        # Core WebDriver interactions and explicit waits
+│   ├── login_page.py       # Authentication flows
+│   └── calendar_page.py    # Appointment scheduling & React date injection
+│
+├── tests/                  # Pytest execution scripts
+│   ├── conftest.py         # WebDriver initialization and Pytest hooks
+│   └── test_patient_booking.py # E2E patient scheduling journey
+│
+├── assets/                 # Test execution evidence and documentation
+│   └── report.pdf          
+│
+└── pytest.ini              # Framework configuration and CLI flags
 ```
 
-2. **Install dependencies:**
-Ensure you have Python 3.x installed, then run:
-```bash
-pip install selenium pytest pytest-html pytest-xdist
-```
+## 🧪 Core E2E Scenarios Validated
+**Patient Appointment Booking Flow:**
+1. Secure patient authentication and consent verification.
+2. Dashboard navigation and dynamic Doctor List rendering.
+3. Doctor profile validation and calendar access.
+4. **Complex UI Interaction:** Date injection via JS to bypass native OS pickers, fetching available time slots.
+5. Exact time slot selection and booking confirmation via dynamic XPaths.
 
-3. **Configure Environment Variables:**
-Update the `config.py` file with your local or staging environment URLs and test credentials:
-```python
-# config.py
-BASE_URL = "http://localhost:3000"
-DOCTOR_EMAIL = "your_test_doctor@email.com"
-PATIENT_EMAIL = "your_test_patient@email.com"
-```
+## 📊 Test Execution & Reporting
+This framework automatically captures the DOM state and screenshots at the exact moment of failure for rapid debugging.
 
-## 💻 Test Execution Commands
+**Visual Proof of Execution:**
+> 📄 [Download the full PDF Test Execution Report](./assets/report.pdf)
 
-Run these commands in your terminal from the root directory of the project.
-
-**Run the entire test suite:**
-```bash
-pytest tests/ -v
-```
-
-**Run a specific test file (e.g., the WebRTC flow):**
-```bash
-pytest tests/test_webrtc_consultation.py -v
-```
-
-**Run tests in parallel (cuts execution time in half):**
-```bash
-pytest tests/ -v -n auto
-```
-
-**Generate an HTML Test Report:**
-```bash
-pytest tests/ -v --html=report.html --self-contained-html
-```
-
-## 🧪 WebRTC Test Architecture
-
-Testing the video consultation room requires two independent browser instances to negotiate a P2P connection via Cloudflare TURN servers. 
-
-The `conftest.py` handles this by yielding a dictionary of independent WebDriver sessions:
-```python
-def test_webrtc_video_consultation(dual_driver):
-    doctor = dual_driver["doctor"]
-    patient = dual_driver["patient"]
-    # ... navigation and validation logic
-```
-The framework injects synthetic green-screen video feeds into both browsers and utilizes JavaScript injection (`execute_script`) to query the HTML5 `<video>` element's `readyState` to assert that remote media frames are successfully rendering across the network.
