@@ -4,7 +4,7 @@ Welcome to my QA Engineering portfolio. This repository contains practical imple
 
 ## 📂 Projects
 
-### [1. HealthConnect E2E Automation Framework (Pytest & Selenium)](./)
+### [1. HealthConnect E2E Automation Framework (Pytest & Selenium)](./healthconnect_seleniumframework_testing)
 A robust Page Object Model (POM) framework engineered to validate a cloud-native React and WebRTC telehealth platform. Features complex React state injection, dynamic explicit waits, and dual-driver parallel execution for peer-to-peer video consultation testing.
 
 ### [2. REST API Automation Suite (Postman & Chai)](./2-api-automation-postman)
