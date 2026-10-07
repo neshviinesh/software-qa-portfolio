@@ -56,6 +56,9 @@ Validating the peer-to-peer telehealth video calls is the technical centerpiece 
 ## 📊 Test Execution & Reporting
 This framework automatically captures the DOM state and screenshots at the exact moment of failure for rapid debugging.
 
+**Validating the Framework (Tests Designed to Fail):**
+To prove the framework actively catches defects, **4 test cases are explicitly designed to fail on purpose**. These deliberate failures demonstrate that the framework successfully detects UI regressions, halts execution appropriately, and accurately triggers the automated screenshot and evidence-collection protocols. The remaining suite consists of fully passing scenarios.
+
 **Visual Proof of Execution:**
 > 📄 [Download the full PDF Test Execution Report](./assets/report.html.pdf)
 
