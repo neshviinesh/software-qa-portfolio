@@ -26,7 +26,7 @@ def test_valid_login(driver):
     login_page.load()
 
     # execcuting login with actual credentials
-    login_page.login("neshviinesh@gmail.com", "123456789")
+    login_page.login("email@gmail.com", "123")
 
     # handle consent popup
     login_page.accept_consent_popup()
