@@ -1,11 +1,11 @@
 class Config:
     # Patient Credentials
-    PATIENT_EMAIL = "patient@gmail.com"
-    PATIENT_PASSWORD = "123456789"
+    PATIENT_EMAIL = "example@gmail.com"
+    PATIENT_PASSWORD = "pw"
 
     # Doctor Credentials
-    DOCTOR_EMAIL = "neshviinesh@gmail.com"
-    DOCTOR_PASSWORD = "123456789"
+    DOCTOR_EMAIL = "example@gmail.com"
+    DOCTOR_PASSWORD = "pw"
 
     # store website url
     BASE_URL = "https://www.myonlinehealthconnect.my/"
