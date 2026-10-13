@@ -2,7 +2,7 @@
   "info": {
     "_postman_id": "2e607d4a-a576-4822-8031-0b4cddf8a34b",
     "name": "HealthConnect API Tests",
-    "description": "Rebuilt from Appendix C test cases IT-05, IT-10, IT-11, IT-12, IT-15, IT-17 (plus UT-16). Original Postman collection was lost; these requests were re-created and re-run. All secrets are Postman variables: copy environment.template.json, fill it in locally, and never commit real keys.",
+    "description": "Conducting API tests",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
     "_exporter_id": "46252606",
     "_collection_link": "https://go.postman.co/collection/46252606-2e607d4a-a576-4822-8031-0b4cddf8a34b?source=collection_link"
@@ -42,7 +42,7 @@
         "url": {
           "raw": ""
         },
-        "description": "Appendix C IT-05. Sends the anon key only, asking for another user's appointments. Expected: empty array. NOTE: change 'patient_id' to the real column name in your appointments table if it differs."
+        "description": "Sends the anon key only, asking for another user's appointments. Expected: empty array."
       },
       "response": []
     },
@@ -94,7 +94,7 @@
         "url": {
           "raw": ""
         },
-        "description": "Appendix C IT-10. Calls the Groq-backed edge function. The AI text varies between runs, so the checks look at structure, not exact wording. Needs the Groq key set in Supabase secrets."
+        "description": "Calls the Groq-backed edge function"
       },
       "response": []
     },
@@ -146,7 +146,7 @@
         "url": {
           "raw": ""
         },
-        "description": "Appendix C IT-11. The <50ms figure in the report was measured server-side; Postman's time includes network, so it is logged, not asserted."
+        "description": ""
       },
       "response": []
     },
@@ -197,7 +197,7 @@
         "url": {
           "raw": ""
         },
-        "description": "Appendix C UT-16 (listed as a unit case against the edge function). Optional extra request."
+        "description": ""
       },
       "response": []
     },
@@ -252,7 +252,7 @@
         "url": {
           "raw": ""
         },
-        "description": "Appendix C IT-12. Checks the 3-sentence limit from the system prompt."
+        "description": "Checks the 3-sentence limit from the system prompt."
       },
       "response": []
     },
@@ -296,7 +296,7 @@
         "url": {
           "raw": ""
         },
-        "description": "Appendix C IT-15. Uses a dummy appointmentId so no real record can change. If this returns 401 instead of 400, the function may have JWT verification switched on, so Stripe's signature check is never reached; check the function's deploy settings. To confirm the database was untouched, look at payment_status in the Supabase Table Editor afterwards."
+        "description": "Uses a dummy appointmentId so no real record can change"
       },
       "response": []
     },
@@ -336,7 +336,7 @@
         "url": {
           "raw": ""
         },
-        "description": "Appendix C IT-17. The report recorded HTTP 400; 401 is also acceptable here, and the actual code is logged. The report names this function both 'get-turn' and 'get-turn-credentials': rename the path to match your deployed function."
+        "description": "both 'get-turn' and 'get-turn-credentials'"
       },
       "response": []
     }
