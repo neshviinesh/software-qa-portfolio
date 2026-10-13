@@ -1,0 +1,3 @@
+   *.postman_environment.json
+   !environment.template.json
+   .env
