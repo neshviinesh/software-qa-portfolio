@@ -10,10 +10,10 @@ A robust Page Object Model (POM) framework engineered to validate a cloud-native
 ### [2. Final Year Project Test Suite (HealthConnect)](./finalyearproject-test-suite)
 Test design and execution for my final year project, a telehealth platform I built as the full-stack developer. 75 documented test cases across unit, integration, system and acceptance levels (74 passed, 1 partial), with a requirements traceability matrix, Vitest unit tests, and a rebuilt Postman API collection. The Postman re-run in October 2026 passed 5 of 7 tests; the 2 failures are documented and caused by a retired third-party AI model. Mostly manual testing, with the automated and manual parts clearly labelled.
 
-### [2. REST API Automation Suite (Postman & Chai)](./2-api-automation-postman)
+### [3. REST API Automation Suite (Postman & Chai)](./2-api-automation-postman)
 A fully automated CI/CD-style testing loop executing full CRUD operations with dynamic data chaining and performance SLAs.
 
-### [3. Agile Defect Triage & Lifecycle (Jira)](./3-jira-defect-management)
+### [4. Agile Defect Triage & Lifecycle (Jira)](./3-jira-defect-management)
 Advanced ISTQB-standard bug reporting and lifecycle management for a complex WebRTC/WebSocket race condition.
 
 ---
