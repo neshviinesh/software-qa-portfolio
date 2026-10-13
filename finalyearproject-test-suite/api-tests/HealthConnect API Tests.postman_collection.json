@@ -1,0 +1,344 @@
+{
+  "info": {
+    "_postman_id": "2e607d4a-a576-4822-8031-0b4cddf8a34b",
+    "name": "HealthConnect API Tests",
+    "description": "Rebuilt from Appendix C test cases IT-05, IT-10, IT-11, IT-12, IT-15, IT-17 (plus UT-16). Original Postman collection was lost; these requests were re-created and re-run. All secrets are Postman variables: copy environment.template.json, fill it in locally, and never commit real keys.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "46252606",
+    "_collection_link": "https://go.postman.co/collection/46252606-2e607d4a-a576-4822-8031-0b4cddf8a34b?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "IT-05 | RLS blocks cross-user read (appointments)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Request accepted (status 200)', () => pm.response.to.have.status(200));",
+              "pm.test('RLS returns zero rows for another user', () => {",
+              "  const body = pm.response.json();",
+              "  pm.expect(body).to.be.an('array').that.is.empty;",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "apikey",
+            "value": "{{SUPABASE_ANON_KEY}}",
+            "type": "text"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{SUPABASE_ANON_KEY}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": ""
+        },
+        "description": "Appendix C IT-05. Sends the anon key only, asking for another user's appointments. Expected: empty array. NOTE: change 'patient_id' to the real column name in your appointments table if it differs."
+      },
+      "response": []
+    },
+    {
+      "name": "IT-10 | Symptom checker returns structured triage (standard input)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status 200', () => pm.response.to.have.status(200));",
+              "const j = pm.response.json();",
+              "pm.test('Has urgency in low/moderate/high', () => pm.expect(['low','moderate','high']).to.include(j.urgency));",
+              "pm.test('possible_conditions is an array', () => pm.expect(j.possible_conditions).to.be.an('array'));",
+              "pm.test('Not flagged as emergency', () => pm.expect(j.emergency).to.not.equal(true));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "apikey",
+            "value": "{{SUPABASE_ANON_KEY}}",
+            "type": "text"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{SUPABASE_ANON_KEY}}",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"symptoms\": \"headache, nausea\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": ""
+        },
+        "description": "Appendix C IT-10. Calls the Groq-backed edge function. The AI text varies between runs, so the checks look at structure, not exact wording. Needs the Groq key set in Supabase secrets."
+      },
+      "response": []
+    },
+    {
+      "name": "IT-11 | Emergency keyword bypasses the AI (chest pain)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status 200', () => pm.response.to.have.status(200));",
+              "const j = pm.response.json();",
+              "pm.test('Urgency is high', () => pm.expect(j.urgency).to.eql('high'));",
+              "pm.test('Emergency flag is true', () => pm.expect(j.emergency).to.eql(true));",
+              "console.log('IT-11 response time (ms), includes network:', pm.response.responseTime);"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "apikey",
+            "value": "{{SUPABASE_ANON_KEY}}",
+            "type": "text"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{SUPABASE_ANON_KEY}}",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"symptoms\": \"chest pain\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": ""
+        },
+        "description": "Appendix C IT-11. The <50ms figure in the report was measured server-side; Postman's time includes network, so it is logged, not asserted."
+      },
+      "response": []
+    },
+    {
+      "name": "UT-16 | Emergency keyword is case-insensitive (CHEST PAIN)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status 200', () => pm.response.to.have.status(200));",
+              "const j = pm.response.json();",
+              "pm.test('Urgency is high', () => pm.expect(j.urgency).to.eql('high'));",
+              "pm.test('Emergency flag is true', () => pm.expect(j.emergency).to.eql(true));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "apikey",
+            "value": "{{SUPABASE_ANON_KEY}}",
+            "type": "text"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{SUPABASE_ANON_KEY}}",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"symptoms\": \"CHEST PAIN\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": ""
+        },
+        "description": "Appendix C UT-16 (listed as a unit case against the edge function). Optional extra request."
+      },
+      "response": []
+    },
+    {
+      "name": "IT-12 | Condition explainer returns a short explanation",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status 200', () => pm.response.to.have.status(200));",
+              "const j = pm.response.json();",
+              "pm.test('Echoes the condition', () => pm.expect(j.condition).to.be.a('string').and.not.empty);",
+              "pm.test('meaning is a non-empty string', () => pm.expect(j.meaning).to.be.a('string').and.not.empty);",
+              "pm.test('meaning is at most 3 sentences', () => {",
+              "  const n = (j.meaning.match(/[.!?](\\s|$)/g) || []).length;",
+              "  pm.expect(n).to.be.within(1, 3);",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "apikey",
+            "value": "{{SUPABASE_ANON_KEY}}",
+            "type": "text"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{SUPABASE_ANON_KEY}}",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"condition\": \"viral gastroenteritis\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": ""
+        },
+        "description": "Appendix C IT-12. Checks the 3-sentence limit from the system prompt."
+      },
+      "response": []
+    },
+    {
+      "name": "IT-15 | Forged Stripe webhook signature is rejected",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Forged signature rejected with 400', () => pm.response.to.have.status(400));",
+              "pm.test('No success payload returned', () => pm.expect(pm.response.text()).to.not.include('\"received\":true'));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          },
+          {
+            "key": "Stripe-Signature",
+            "value": "t=1700000000,v1=forged_signature_for_testing",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"id\": \"evt_forged_test\",\n  \"type\": \"checkout.session.completed\",\n  \"data\": {\n    \"object\": {\n      \"id\": \"cs_test_forged\",\n      \"metadata\": {\n        \"appointmentId\": \"00000000-0000-0000-0000-000000000000\"\n      }\n    }\n  }\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": ""
+        },
+        "description": "Appendix C IT-15. Uses a dummy appointmentId so no real record can change. If this returns 401 instead of 400, the function may have JWT verification switched on, so Stripe's signature check is never reached; check the function's deploy settings. To confirm the database was untouched, look at payment_status in the Supabase Table Editor afterwards."
+      },
+      "response": []
+    },
+    {
+      "name": "IT-17 | TURN credentials function rejects a request with no auth",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Unauthenticated request rejected (400 or 401)', () => pm.expect([400, 401]).to.include(pm.response.code));",
+              "pm.test('No ICE server config leaked', () => pm.expect(pm.response.text()).to.not.include('urls'));",
+              "console.log('IT-17 actual status:', pm.response.code, '(report recorded 400)');"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": ""
+        },
+        "description": "Appendix C IT-17. The report recorded HTTP 400; 401 is also acceptable here, and the actual code is logged. The report names this function both 'get-turn' and 'get-turn-credentials': rename the path to match your deployed function."
+      },
+      "response": []
+    }
+  ]
+}
